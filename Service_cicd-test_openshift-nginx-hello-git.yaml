@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/justone0127/openshift-nginx-hello.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: openshift-nginx-hello-git
+    app.kubernetes.io/component: openshift-nginx-hello-git
+    app.kubernetes.io/instance: openshift-nginx-hello-git
+    app.kubernetes.io/name: openshift-nginx-hello-git
+    app.kubernetes.io/part-of: openshift-nginx-hello-git-app
+  name: openshift-nginx-hello-git
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: openshift-nginx-hello-git
+    deploymentconfig: openshift-nginx-hello-git
+  sessionAffinity: None
+  type: ClusterIP

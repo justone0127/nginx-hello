@@ -1,0 +1,63 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    app.openshift.io/route-disabled: "false"
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/justone0127/openshift-nginx-hello.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: openshift-nginx-hello-git
+    app.kubernetes.io/component: openshift-nginx-hello-git
+    app.kubernetes.io/instance: openshift-nginx-hello-git
+    app.kubernetes.io/name: openshift-nginx-hello-git
+    app.kubernetes.io/part-of: openshift-nginx-hello-git-app
+  name: openshift-nginx-hello-git
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: openshift-nginx-hello-git
+    deploymentconfig: openshift-nginx-hello-git
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: openshift-nginx-hello-git
+        deploymentconfig: openshift-nginx-hello-git
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/cicd-test/openshift-nginx-hello-git@sha256:ea8f4fa4076fa607cd93de146b2296cbd836192c43b2ecb2b7fcfe4c28a19166
+        imagePullPolicy: Always
+        name: openshift-nginx-hello-git
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - openshift-nginx-hello-git
+      from:
+        kind: ImageStreamTag
+        name: openshift-nginx-hello-git:latest
+        namespace: cicd-test
+      lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/cicd-test/openshift-nginx-hello-git@sha256:ea8f4fa4076fa607cd93de146b2296cbd836192c43b2ecb2b7fcfe4c28a19166
+    type: ImageChange
+  - type: ConfigChange
